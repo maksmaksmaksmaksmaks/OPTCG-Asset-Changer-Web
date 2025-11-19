@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi import Response
 from PIL import Image
+import os
 import io
 from starlette.middleware.cors import CORSMiddleware
 
@@ -74,5 +75,6 @@ async def full(textures: list[UploadFile] = File(...)):
 # @app.get("/hello/{name}")
 # async def say_hello(name: str):
 #     return {"message": f"Hello {name}"}
+
 
 
