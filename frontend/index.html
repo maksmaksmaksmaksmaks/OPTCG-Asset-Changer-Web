@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Texture Uploader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+            transform: translateX(2px);
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .texture-name {
+            font-weight: 500;
+            color: #2d3748;
+            font-size: 0.9rem;
+        }
+
+        .preview {
+            max-width: 100px;
+            max-height: 50px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .desc {
+            color: #718096;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+        }
+
+        .file-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+        }
+
+        .file-name {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #718096;
+        }
+
+        .submit-wrapper {
+            padding: 2rem;
+            text-align: center;
+            background: #f7fafc;
+        }
+
+        button[type="submit"] {
+            padding: 1rem 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(-1px);
+        }
+
+        .status-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Unity Texture Uploader</h1>
+        <p>Select textures to upload and generate your Unity assets file</p>
+    </div>
+
+    <div class="content">
+        <form id="textureForm">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="width: 60px;">Use</th>
+                        <th style="width: 200px;">Texture Name</th>
+                        <th style="width: 120px;">Preview</th>
+                        <th>Description</th>
+                        <th style="width: 180px;">Upload Image</th>
+                    </tr>
+                    </thead>
+                    <tbody id="textureTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="submit-wrapper">
+                <button type="submit">Upload Selected Textures</button>
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const api = "http://127.0.0.1:8000/full";
+    const textures = [
+        { name: "buttonLong_beige", size: "190x49", desc: "the button for everything, it gets stretched" },
+        { name: "HighlightSquare", size: "178x178", desc: "highlight on selected cards and don" },
+        { name: "Arrow", size: "60x30", desc: "the red arrow showing who attacks and where" },
+        { name: "AttackArrow", size: "200x100", desc: "the wide power is displayed over" },
+        { name: "panel_beige", size: "100x100", desc: "background for choosing game and some labels" },
+        { name: "arrow_beige", size: "100x100", desc: "arrows for checking trash" },
+        { name: "Background", size: "32x32", desc: "chat background" },
+        { name: "YouLose", size: "391x90", desc: "you lose screen" },
+        { name: "YouWin", size: "377x88", desc: "you win screen" },
+        { name: "Checkmark", size: "64x64", desc: "checkmark in deck builder and timed lobby" },
+        { name: "ClydeBanner", size: "1500x500", desc: "ad banner - transparency doesnt work" },
+        { name: "ImpactBanner", size: "1500x500", desc: "ad banner - transparency doesnt work" },
+        { name: "CrossBanner", size: "1000x400", desc: "ad banner" },
+        { name: "DropdownArrow", size: "64x64", desc: "arrow on all dropdowns" },
+        { name: "InputFieldBackground", size: "32x32", desc: "just for the deck name" },
+        { name: "Launch_bounty", size: "500x133", desc: "- transparency doesnt work" },
+        { name: "MatchHistory", size: "500x133", desc: "- transparency doesnt work" },
+        { name: "TCGMM_discord", size: "488x139", desc: "- transparency doesnt work" },
+        { name: "PatronAsk", size: "1080x270", desc: "/" },
+        { name: "UIMask", size: "32x32", desc: "deck editor background for where you pick cards from" },
+        { name: "UISprite", size: "32x32", desc: "dropdowns, checkboxes and game select buttons" },
+        { name: "audioOff", size: "50x50", desc: "/" },
+        { name: "audioOn", size: "50x50", desc: "/" },
+        { name: "musicOff", size: "50x50", desc: "/" },
+        { name: "musicOn", size: "50x50", desc: "/" },
+        { name: "toppng.com-download-blue-glow-effect-1024x1024", size: "835x835", desc: "the glow effect for prio - it has a blue filter over :3" }
+    ];
+
+    const tbody = document.getElementById("textureTableBody");
+
+    textures.forEach(tex => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+                <td class="checkbox-wrapper">
+                    <input type="checkbox" class="useTexture">
+                </td>
+                <td class="texture-name">${tex.name}</td>
+                <td>
+                    <img class="preview" style="display: none;" />
+                </td>
+                <td class="desc">${tex.desc}</td>
+                <td>
+                    <div class="file-input-wrapper">
+                        <input type="file" accept="image/*" class="textureFile" id="file_${tex.name}">
+                        <label for="file_${tex.name}" class="file-label">Choose File</label>
+                        <span class="file-name"></span>
+                    </div>
+                </td>
+            `;
+        tbody.appendChild(tr);
+
+        const fileInput = tr.querySelector(".textureFile");
+        const preview = tr.querySelector(".preview");
+        const fileName = tr.querySelector(".file-name");
+
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0];
+            if (file) {
+                fileName.textContent = file.name;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fileName.textContent = "";
+                preview.src = "";
+                preview.style.display = "none";
+            }
+        });
+    });
+
+    const statusMessage = document.getElementById("statusMessage");
+
+    function showStatus(message, isSuccess) {
+        statusMessage.textContent = message;
+        statusMessage.className = `status-message ${isSuccess ? 'success' : 'error'}`;
+        statusMessage.style.display = 'block';
+        setTimeout(() => {
+            statusMessage.style.display = 'none';
+        }, 5000);
+    }
+
+    document.getElementById("textureForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        let count = 0;
+
+        tbody.querySelectorAll("tr").forEach((tr) => {
+            const use = tr.querySelector(".useTexture").checked;
+            const fileInput = tr.querySelector(".textureFile");
+            if (use && fileInput.files.length > 0) {
+                formData.append("textures", fileInput.files[0], tr.cells[1].innerText);
+                count++;
+            }
+        });
+
+        if (count === 0) {
+            showStatus("Please select at least one texture to upload.", false);
+            return;
+        }
+
+        try {
+            const response = await fetch(api, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("Upload failed", errorText);
+                showStatus("Upload failed. Please try again.", false);
+                return;
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "sharedassets1.assets";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+
+            showStatus(`Successfully uploaded ${count} texture(s)!`, true);
+        } catch (error) {
+            console.error("Error:", error);
+            showStatus("An error occurred during upload.", false);
+        }
+    });
+</script>
+</body>
+</html>
