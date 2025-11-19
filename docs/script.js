@@ -137,7 +137,7 @@ function renderTextures() {
 
         textureName.addEventListener("mouseenter", (e) => {
             if (tex.name) {
-                hoverPreviewImg.src = "../images/"+tex.name+".png";
+                hoverPreviewImg.src = "images/"+tex.name+".png";
                 hoverPreview.style.display = "block";
                 updatePreviewPosition(e);
             }
