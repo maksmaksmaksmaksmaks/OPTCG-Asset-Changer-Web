@@ -5,13 +5,13 @@ import os
 import io
 from starlette.middleware.cors import CORSMiddleware
 
-import AssetChanger
+from backend import AssetChanger
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allow all origins (test mode)
+    allow_origins=["https://maksmaksmaksmaksmaks.github.io"],  # allow all origins (test mode)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
