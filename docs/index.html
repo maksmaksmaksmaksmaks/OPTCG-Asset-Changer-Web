@@ -82,16 +82,14 @@
         }
 
         tbody tr {
-            transition: all 0.2s ease;
+            transition: background-color 0.2s ease;
         }
 
         tbody tr:hover {
             background: #f7fafc;
-            transform: translateX(2px);
         }
 
         .checkbox-wrapper {
-            display: flex;
             align-items: center;
             justify-content: center;
         }
@@ -255,7 +253,11 @@
 </div>
 
 <script>
-    const api = "http://127.0.0.1:8000/full";
+    const api = "http://127.0.0.1:8000";
+    // wakeup
+    fetch(api+"/ping", {
+        method: "GET",
+    });
     const textures = [
         { name: "buttonLong_beige", size: "190x49", desc: "the button for everything, it gets stretched" },
         { name: "HighlightSquare", size: "178x178", desc: "highlight on selected cards and don" },
@@ -310,6 +312,7 @@
 
         const fileInput = tr.querySelector(".textureFile");
         const preview = tr.querySelector(".preview");
+        const checkbox = tr.querySelector(".useTexture")
         const fileName = tr.querySelector(".file-name");
 
         fileInput.addEventListener("change", () => {
@@ -318,6 +321,7 @@
                 fileName.textContent = file.name;
                 const reader = new FileReader();
                 reader.onload = e => {
+                    checkbox.checked = true;
                     preview.src = e.target.result;
                     preview.style.display = "block";
                 };
@@ -361,7 +365,7 @@
         }
 
         try {
-            const response = await fetch(api, {
+            const response = await fetch(api+"/full", {
                 method: "POST",
                 body: formData
             });
