@@ -35,11 +35,12 @@ def Run(files):
                     exit(1)
 
         print(f"Replaced {modified_count} texture(s)")
-        return env.file.save()
+        return env.files.save()
 
     except Exception as e:
         print(f"\n*** Error: {e}")
         print(f"ABORTED")
         exit(1)
+
 
 
