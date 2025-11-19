@@ -5,7 +5,7 @@ import os
 import io
 from starlette.middleware.cors import CORSMiddleware
 
-from backend import AssetChanger
+import AssetChanger
 
 app = FastAPI()
 
