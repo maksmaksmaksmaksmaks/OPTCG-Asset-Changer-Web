@@ -37,6 +37,7 @@ app.add_middleware(
 
 @app.get("/ping")
 async def ping():
+    print("Files:", os.listdir("."))
     return {"message":"pong"}
 
 @app.post("/full")
@@ -73,4 +74,5 @@ async def full(textures: list[UploadFile] = File(...)):
 # @app.get("/hello/{name}")
 # async def say_hello(name: str):
 #     return {"message": f"Hello {name}"}
+
 
