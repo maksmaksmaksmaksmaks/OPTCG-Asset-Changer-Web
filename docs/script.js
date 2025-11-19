@@ -58,7 +58,6 @@ const textures = [
 const tbody = document.getElementById("textureTableBody");
 const showMoreWrapper = document.getElementById("showMoreWrapper");
 const showMoreBtn = document.getElementById("showMoreBtn");
-const remainingCount = document.getElementById("remainingCount");
 
 let showingAll = false;
 const initialDisplayCount = 7;
@@ -140,7 +139,6 @@ function renderTextures() {
             showMoreWrapper.style.display = 'none';
         } else {
             showMoreWrapper.style.display = 'block';
-            remainingCount.textContent = textures.length - initialDisplayCount;
         }
     } else {
         showMoreWrapper.style.display = 'none';
