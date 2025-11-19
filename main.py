@@ -35,6 +35,10 @@ app.add_middleware(
 #             "Content-Disposition": "attachment; filename=sharedassets1.assets"
 #         },)
 
+@app.get("/ping")
+async def ping():
+    return {"message":"pong"}
+
 @app.post("/full")
 async def full(textures: list[UploadFile] = File(...)):
     try:
@@ -69,3 +73,4 @@ async def full(textures: list[UploadFile] = File(...)):
 # @app.get("/hello/{name}")
 # async def say_hello(name: str):
 #     return {"message": f"Hello {name}"}
+
