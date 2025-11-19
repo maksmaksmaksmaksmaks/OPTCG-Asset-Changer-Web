@@ -10,7 +10,7 @@ def Run(files):
 
     try:
         modified_count = 0
-        env = UnityPy.load("sharedAssets1.assets")
+        env = UnityPy.load("sharedassets1.assets")
         for obj in env.objects:
             if obj.type.name != "Texture2D":
                 continue
@@ -42,6 +42,7 @@ def Run(files):
         print(f"\n*** Error: {e}")
         print(f"ABORTED")
         exit(1)
+
 
 
 
