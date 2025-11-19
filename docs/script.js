@@ -130,7 +130,29 @@ function renderTextures() {
                 delete savedImages[tex.name];
                 saveToLocalStorage();
             }
+        })
+        const textureName = tr.querySelector(".texture-name");
+        const hoverPreview = document.getElementById("hoverPreview");
+        const hoverPreviewImg = document.getElementById("hoverPreviewImg");
+
+        textureName.addEventListener("mouseenter", (e) => {
+            if (tex.name) {
+                hoverPreviewImg.src = "../images/"+tex.name+".png";
+                hoverPreview.style.display = "block";
+                updatePreviewPosition(e);
+            }
         });
+
+        textureName.addEventListener("mousemove", (e) => {
+            if (tex.name) {
+                updatePreviewPosition(e);
+            }
+        });
+
+        textureName.addEventListener("mouseleave", () => {
+            hoverPreview.style.display = "none";
+        });
+
     }
 
     // Update show more button
@@ -226,3 +248,25 @@ document.getElementById("textureForm").addEventListener("submit", async (e) => {
         showStatus("An error occurred during upload.", false);
     }
 });
+
+function updatePreviewPosition(e) {
+    const preview = document.getElementById("hoverPreview");
+    const offset = 20;
+
+    // Position to the right of cursor by default
+    let left = e.clientX + offset;
+    let top = e.clientY + offset;
+
+    // Check if it would go off the right edge
+    if (left + preview.offsetWidth > window.innerWidth) {
+        left = e.clientX - preview.offsetWidth - offset;
+    }
+
+    // Check if it would go off the bottom edge
+    if (top + preview.offsetHeight > window.innerHeight) {
+        top = e.clientY - preview.offsetHeight - offset;
+    }
+
+    preview.style.left = left + "px";
+    preview.style.top = top + "px";
+}

@@ -99,6 +99,12 @@ input[type="checkbox"] {
     font-weight: 500;
     color: #2d3748;
     font-size: 0.9rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.texture-name:hover {
+    color: #667eea;
 }
 
 .preview {
@@ -216,3 +222,26 @@ button[type="submit"]:active {
         font-size: 0.8rem;
     }
 }
+
+.hover-preview {
+    position: fixed;
+    display: none;
+    pointer-events: none;
+    z-index: 1000;
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+}
+
+.hover-preview img {
+    max-width: 280px;
+    max-height: 280px;
+    display: block;
+    border-radius: 4px;
+}
+
+
+
