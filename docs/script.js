@@ -1,9 +1,31 @@
 const api = "https://optcg-asset-changer-web.onrender.com";
 
 // Wake up the server
-fetch(api + "/ping", {
-    method: "GET",
-});
+async function status() {
+    fetch(api + "/ping", {
+        method: "GET",
+    }).then(response => {
+        console.log(response)
+        // if (response.ok) {}
+    });
+}
+
+async function pingBackend() {
+    try {
+        const res = await fetch("https://your-backend.onrender.com/ping");
+        const text = await res.text();
+
+        if (text.includes("Your service is starting") || text.includes("waking up")) {
+            showStatus("Backend is waking up…");
+        } else {
+            const data = JSON.parse(text);
+            showStatus(`Backend is online: ${data.status}`);
+        }
+    } catch (err) {
+        showStatus("Error contacting backend");
+    }
+}
+
 
 // Load saved images from localStorage on page load
 let savedImages = {};
@@ -77,7 +99,7 @@ function renderTextures() {
             <td>
                 <img class="preview" style="display: none;" />
             </td>
-            <td class="desc">${tex.desc}</td>
+            <td class="desc">${tex.size} ${tex.desc}</td>
             <td>
                 <div class="file-input-wrapper">
                     <input type="file" accept="image/*" class="textureFile" id="file_${tex.name}">
