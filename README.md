@@ -7,19 +7,18 @@
 This will download a new ```sharedassets1.assets``` file that you need to place into your sim folder
 ![Make changes](img_instructions/MakeChanges.png)
 ## Find the file
-Right click on the downloaded file and select "Cut"
+Right click on the downloaded file and select "Cut"<br>
 ![Cut the file](img_instructions/FileCut.png)
 
 ## Navigate to the sim folder
-You want to find ```1.34b_Windows\Builds_Windows\OPTCGSim_Data``` folder
-
-Next to your ```OPTCGSim.exe```
-![Folder location](img_instructions/FolderLocation.png)
-It should look like this
-![Folder structure](img_instructions/Folder.png)
-Here you right-click and select "Paste"
-![Paste new file](img_instructions/FilePaste.png)
-Replace the existing one
+You want to find ```1.34b_Windows\Builds_Windows\OPTCGSim_Data``` folder<br>
+Next to your ```OPTCGSim.exe```<br>
+![Folder location](img_instructions/FolderLocation.png)<br>
+It should look like this<br>
+![Folder structure](img_instructions/Folder.png)<br>
+Here you right-click and select "Paste"<br>
+![Paste new file](img_instructions/FilePaste.png)<br>
+Replace the existing one<br>
 ![Replace old file](img_instructions/FileReplace.png)
 
 ## Now just run the sim :3
