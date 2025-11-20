@@ -1,28 +1,27 @@
 const api = "https://optcg-asset-changer-web.onrender.com";
 
-// Wake up the server
-async function status() {
-    fetch(api + "/ping", {
-        method: "GET",
-    }).then(response => {
-        console.log(response)
-        // if (response.ok) {}
-    });
-}
+pingBackend()
+let online = false;
 
 async function pingBackend() {
     try {
-        const res = await fetch("https://your-backend.onrender.com/ping");
+        const res = await fetch(api+"/ping");
         const text = await res.text();
-
-        if (text.includes("Your service is starting") || text.includes("waking up")) {
-            showStatus("Backend is waking up…");
-        } else {
-            const data = JSON.parse(text);
-            showStatus(`Backend is online: ${data.status}`);
+        const data = JSON.parse(text);
+        if (data.message==="pong") {
+            // showStatus("Is up",true);
+            online=true;
+            document.getElementById("submit-button").disabled=false;
+            document.getElementById("submit-span").textContent="Make changes!";
+            console.log("enabled")
+        }
+        else
+        {
+            setTimeout(pingBackend, 5000);
         }
     } catch (err) {
         showStatus("Error contacting backend");
+        setTimeout(pingBackend, 5000);
     }
 }
 
@@ -78,15 +77,11 @@ const textures = [
 ];
 
 const tbody = document.getElementById("textureTableBody");
-const showMoreWrapper = document.getElementById("showMoreWrapper");
-const showMoreBtn = document.getElementById("showMoreBtn");
 
-let showingAll = false;
-const initialDisplayCount = 7;
 
 function renderTextures() {
     tbody.innerHTML = '';
-    const displayCount = showingAll ? textures.length : initialDisplayCount;
+    const displayCount =  textures.length;
 
     for (let i = 0; i < displayCount; i++) {
         const tex = textures[i];
@@ -177,23 +172,10 @@ function renderTextures() {
 
     }
 
-    // Update show more button
-    if (textures.length > initialDisplayCount) {
-        if (showingAll) {
-            showMoreWrapper.style.display = 'none';
-        } else {
-            showMoreWrapper.style.display = 'block';
-        }
-    } else {
-        showMoreWrapper.style.display = 'none';
-    }
+
 }
 
-// Show more button handler
-showMoreBtn.addEventListener('click', () => {
-    showingAll = true;
-    renderTextures();
-});
+
 
 // Initial render
 renderTextures();

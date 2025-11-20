@@ -8,14 +8,20 @@
 </head>
 <body>
 <div class="container">
+
+    <form id="textureForm">
     <div class="header">
         <div>
             <h1>OPTCGSim Asset Changer</h1>
             <p>Make your sim look pretty :3</p>
+            <br>
+            <a href="https://github.com/maksmaksmaksmaksmaks/OPTCG-Asset-Changer-Web/releases/tag/Assets-1.0">You can get some assets here!</a>
+            <br>
+            <a href="https://github.com/maksmaksmaksmaksmaks/OPTCG-Asset-Changer-Web">Git and Instructions</a>
         </div>
         <div class="submit-wrapper">
-            <button type="submit">
-                <span class="submit-span">Make changes!</span>
+            <button type="submit" id="submit-button" disabled>
+                <span class="submit-span" id="submit-span">Waiting for server</span>
             </button>
         </div>
 
@@ -23,32 +29,18 @@
     </div>
     <div id="statusMessage" class="status-message"></div>
     <div class="content">
-        <form id="textureForm">
             <div class="table-wrapper">
                 <table>
-                    <thead>
-                    <tr>
-                        <th style="width: 60px;">Use</th>
-                        <th style="width: 200px;">Texture Name</th>
-                        <th style="width: 120px;">Preview</th>
-                        <th>Description</th>
-                        <th style="width: 180px;">Upload Image</th>
-                    </tr>
-                    </thead>
                     <tbody id="textureTableBody">
                     </tbody>
                 </table>
             </div>
 
-            <div id="showMoreWrapper" style="text-align: center; padding: 1.5rem; display: none;">
-                <button type="button" id="showMoreBtn" style="padding: 0.75rem 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
-                    Show More Textures
-                </button>
-            </div>
 
 
-        </form>
+
     </div>
+    </form>
 </div>
 
 <div id="hoverPreview" class="hover-preview">
