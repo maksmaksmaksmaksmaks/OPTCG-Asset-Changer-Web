@@ -1,12 +1,13 @@
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from fastapi import Response
-from PIL import Image
 import os
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from PIL import Image
 import io
+
+from starlette.background import BackgroundTask
 from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import FileResponse
 
 import AssetChanger
-
 app = FastAPI()
 
 app.add_middleware(
@@ -36,20 +37,17 @@ async def full(textures: list[UploadFile] = File(...)):
 
         print(images)
         changed = AssetChanger.Run(images)
+        # return {"message": "ok!"}
         if changed is None:
             return {"error": "something broke and debugging doesnt work yet :D"}
 
-        return Response(
-            content=changed,
+        return FileResponse(
+            changed,
             media_type="application/octet-stream",
-            headers={
-                "Content-Disposition": "attachment; filename=sharedassets1.assets.resS"
-            }, )
+            filename="sharedassets1.assets.resS",
+            background=BackgroundTask(os.remove, changed),
+        )
     except Exception as e:
         print(f"Error processing textures: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-
-
-
 
