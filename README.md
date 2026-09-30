@@ -4,7 +4,9 @@
 ## Pick the images you want to use
 ![Pick the images](img_instructions/PickImages.png)
 ## Make changes
-This will download a new ```sharedassets1.assets.resS``` file that you need to place into your sim folder
+This will download a new ```sharedassets1.assets.resS``` file that you need to place into your sim folder 
+
+(it used to be .assets, now its .assets.resS)
 ![Make changes](img_instructions/MakeChanges.png)
 ## Find the file
 Right click on the downloaded file and select "Cut"<br>
