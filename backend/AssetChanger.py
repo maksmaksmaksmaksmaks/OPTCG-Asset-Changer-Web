@@ -1,7 +1,28 @@
+import os
+import shutil
+import tempfile
+import urllib.request
 import UnityPy
 from pathlib import Path
 from PIL import Image
 from UnityPy.export import Texture2DConverter as T2D
+
+RES_NAME = "sharedassets1.assets.resS"
+AST_NAME = "sharedassets1.assets"
+RES_URL = "https://github.com/maksmaksmaksmaksmaks/OPTCG-Asset-Changer-Web/releases/download/simdata/"
+
+
+VERSION = "1.43b"
+CACHE_DIR = Path("cache") / VERSION
+
+def ensure_file(name):
+    path = CACHE_DIR / name
+    if not path.exists():
+        CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        tmp = str(path) + ".part"
+        urllib.request.urlretrieve(RES_URL + name, tmp)
+        os.replace(tmp, path)
+    return str(path)
 
 
 def build_texture_bytes(img, tex):
@@ -25,48 +46,52 @@ def Run(files):
 
     # print("Changes:")
     # for asset_name, img_file in files.items():
-        # print(f"  {img_file} -> {asset_name}")
+    #     print(f"  {img_file} -> {asset_name}")
 
+    out_path = None
     try:
-        modified_count = 0
-        buffers = {}  # resS file name -> bytearray
-        env = UnityPy.load("sharedAssets1.assets")
+        patches = []
+        env = UnityPy.load(ensure_file(AST_NAME))
 
         for obj in env.objects:
             if obj.type.name != "Texture2D":
                 continue
 
             tex = obj.read()
-            tex_name = tex.m_Name
-
-            if tex_name not in files:
+            if tex.m_Name not in files:
                 continue
 
             sd = tex.m_StreamData
             if sd is None or not sd.path or sd.size == 0:
-                raise Exception(f"{tex_name}: pixels are not stored in a .resS file")
+                raise Exception(f"{tex.m_Name}: pixels are not stored in a .resS file")
+            if Path(sd.path).name != RES_NAME:
+                raise Exception(f"{tex.m_Name}: lives in {Path(sd.path).name}, not {RES_NAME}")
 
-            new_bytes = build_texture_bytes(files[tex_name], tex)
+            new_bytes = build_texture_bytes(files[tex.m_Name], tex)
             if len(new_bytes) != sd.size:
-                raise Exception(f"{tex_name}: size mismatch (new {len(new_bytes)} vs original {sd.size})")
+                raise Exception(f"{tex.m_Name}: size mismatch (new {len(new_bytes)} vs original {sd.size})")
 
-            res_name = Path(sd.path).name
-            if res_name not in buffers:
-                buffers[res_name] = bytearray(Path(res_name).read_bytes())
+            patches.append((sd.offset, new_bytes))
 
-            buffers[res_name][sd.offset:sd.offset + sd.size] = new_bytes
-            modified_count += 1
-
-        # print(f"Replaced {modified_count} texture(s)")
-
-        if modified_count == 0:
+        # print(f"Replaced {len(patches)} texture(s)")
+        if not patches:
             return None
-        if len(buffers) > 1:
-            raise Exception(f"Textures span several .resS files: {list(buffers)}")
 
-        return bytes(next(iter(buffers.values())))
+        # Copy the original on disk (not in memory) and write the patches into the copy
+        src = ensure_file(RES_NAME)
+        fd, out_path = tempfile.mkstemp(suffix=".resS")
+        os.close(fd)
+        shutil.copyfile(src, out_path)
+        with open(out_path, "r+b") as f:
+            for offset, data in patches:
+                f.seek(offset)
+                f.write(data)
+
+        return out_path
 
     except Exception as e:
         # print(f"\n*** Error: {e}")
         # print("ABORTED")
+        if out_path and os.path.exists(out_path):
+            os.remove(out_path)
         raise
