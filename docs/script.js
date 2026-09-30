@@ -240,7 +240,7 @@ document.getElementById("textureForm").addEventListener("submit", async (e) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "sharedassets1.assets";
+        a.download = "sharedassets1.assets.resS";
         document.body.appendChild(a);
         a.click();
         a.remove();
