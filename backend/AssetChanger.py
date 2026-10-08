@@ -12,7 +12,7 @@ AST_NAME = "sharedassets1.assets"
 RES_URL = "https://github.com/maksmaksmaksmaksmaks/OPTCG-Asset-Changer-Web/releases/download/simdata/"
 
 
-VERSION = "1.43b"
+VERSION = "1.44a"
 CACHE_DIR = Path("cache") / VERSION
 
 def ensure_file(name):
