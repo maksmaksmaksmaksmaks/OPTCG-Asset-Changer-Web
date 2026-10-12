@@ -2,6 +2,7 @@ const api = "https://optcg-asset-changer-web.onrender.com";
 
 pingBackend()
 let online = false;
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function pingBackend() {
     try {
@@ -196,6 +197,8 @@ document.getElementById("textureForm").addEventListener("submit", async (e) => {
     const formData = new FormData();
     let count = 0;
 
+    document.getElementById("submit-span").textContent="Working on it...";
+
     tbody.querySelectorAll("tr").forEach((tr) => {
         const use = tr.querySelector(".useTexture").checked;
         const textureName = tr.cells[1].innerText;
@@ -233,6 +236,7 @@ document.getElementById("textureForm").addEventListener("submit", async (e) => {
             const errorText = await response.text();
             console.error("Upload failed", errorText);
             showStatus("Upload failed. Please try again.", false);
+            document.getElementById("submit-span").textContent="OOPS! try again.";
             return;
         }
 
@@ -247,6 +251,11 @@ document.getElementById("textureForm").addEventListener("submit", async (e) => {
         window.URL.revokeObjectURL(url);
 
         showStatus(`Successfully uploaded ${count} texture(s)!`, true);
+        document.getElementById("submit-span").textContent="All done!";
+        (async () => {
+            await sleep(2000);
+            document.getElementById("submit-span").textContent = "Make changes!";
+        })();
     } catch (error) {
         console.error("Error:", error);
         showStatus("An error occurred during upload.", false);
