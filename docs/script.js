@@ -253,8 +253,8 @@ document.getElementById("textureForm").addEventListener("submit", async (e) => {
         showStatus(`Successfully uploaded ${count} texture(s)!`, true);
         document.getElementById("submit-span").textContent="All done!";
         (async () => {
-            await sleep(2000);
-            document.getElementById("submit-span").textContent = "Make changes!";
+            await sleep(4000);
+            document.getElementById("submit-span").textContent = "Make more!";
         })();
     } catch (error) {
         console.error("Error:", error);
